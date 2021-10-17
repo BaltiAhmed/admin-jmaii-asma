@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Bar,
   Bubble,
@@ -14,6 +14,22 @@ import {
 import { MDBContainer } from "mdbreact";
 import DocsLink from "../components/docsLink";
 import SectionContainer from "../components/sectionContainer";
+import { makeStyles } from "@material-ui/core/styles";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 140,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
 
 // LineChart
 const dataLine = {
@@ -67,20 +83,6 @@ const dataRadar = {
 };
 
 // barChart
-const dataBar = {
-  labels: ["January", "February", "March", "April", "May", "June", "July"],
-  datasets: [
-    {
-      label: "My First dataset",
-      backgroundColor: "rgba(255,99,132,0.2)",
-      borderColor: "rgba(255,99,132,1)",
-      borderWidth: 1,
-      hoverBackgroundColor: "rgba(255,99,132,0.4)",
-      hoverBorderColor: "rgba(255,99,132,1)",
-      data: [65, 59, 80, 81, 56, 55, 40],
-    },
-  ],
-};
 
 // Horizontal Chart
 const dataHorizontal = {
@@ -114,16 +116,6 @@ const dataHorizontal = {
 };
 
 // Polar Chart
-const dataPolar = {
-  datasets: [
-    {
-      data: [11, 16, 7, 3, 14],
-      backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
-      label: "My dataset", // for legend
-    },
-  ],
-  labels: ["Jan", "Feb", "Mar", "Apr", "May"],
-};
 
 // Pie Chart
 const dataPie = {
@@ -146,24 +138,6 @@ const dataPie = {
         "#A8B3C5",
         "#616774",
         "#da92db",
-      ],
-    },
-  ],
-};
-
-// Doughnut Chart
-const dataDoughnut = {
-  labels: ["Red", "Green", "Yellow", "Grey", "Dark Grey"],
-  datasets: [
-    {
-      data: [300, 50, 100, 40, 120],
-      backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
-      hoverBackgroundColor: [
-        "#FF5A5E",
-        "#5AD3D1",
-        "#FFC870",
-        "#A8B3C5",
-        "#616774",
       ],
     },
   ],
@@ -212,201 +186,197 @@ const dataBubble = {
   ],
 };
 
-// Scatter Charts
-const dataScatter = {
-  labels: ["Scatter"],
-  datasets: [
-    {
-      borderColor: "rgba(99,0,125, .2)",
-      backgroundColor: "rgba(99,0,125, .5)",
-      label: "V(node2)",
-      data: [
-        {
-          x: 1,
-          y: -1.711e-2,
-        },
-        {
-          x: 1.26,
-          y: -2.708e-2,
-        },
-        {
-          x: 1.58,
-          y: -4.285e-2,
-        },
-        {
-          x: 2.0,
-          y: -6.772e-2,
-        },
-        {
-          x: 2.51,
-          y: -1.068e-1,
-        },
-        {
-          x: 3.16,
-          y: -1.681e-1,
-        },
-        {
-          x: 3.98,
-          y: -2.635e-1,
-        },
-        {
-          x: 5.01,
-          y: -4.106e-1,
-        },
-        {
-          x: 6.31,
-          y: -6.339e-1,
-        },
-        {
-          x: 7.94,
-          y: -9.659e-1,
-        },
-        {
-          x: 10.0,
-          y: -1.445,
-        },
-        {
-          x: 12.6,
-          y: -2.11,
-        },
-        {
-          x: 15.8,
-          y: -2.992,
-        },
-        {
-          x: 20.0,
-          y: -4.102,
-        },
-        {
-          x: 25.1,
-          y: -5.429,
-        },
-        {
-          x: 31.6,
-          y: -6.944,
-        },
-        {
-          x: 39.8,
-          y: -8.607,
-        },
-        {
-          x: 50.1,
-          y: -1.038e1,
-        },
-        {
-          x: 63.1,
-          y: -1.223e1,
-        },
-        {
-          x: 79.4,
-          y: -1.413e1,
-        },
-        {
-          x: 100.0,
-          y: -1.607e1,
-        },
-        {
-          x: 126,
-          y: -1.803e1,
-        },
-        {
-          x: 158,
-          y: -2e1,
-        },
-        {
-          x: 200,
-          y: -2.199e1,
-        },
-        {
-          x: 251,
-          y: -2.398e1,
-        },
-        {
-          x: 316,
-          y: -2.597e1,
-        },
-        {
-          x: 398,
-          y: -2.797e1,
-        },
-        {
-          x: 501,
-          y: -2.996e1,
-        },
-        {
-          x: 631,
-          y: -3.196e1,
-        },
-        {
-          x: 794,
-          y: -3.396e1,
-        },
-        {
-          x: 1000,
-          y: -3.596e1,
-        },
-      ],
-    },
-  ],
-};
-
-const scatterOptions = {
-  title: {
-    display: true,
-    text: "Scatter Chart - Logarithmic X-Axis",
-  },
-  scales: {
-    xAxes: [
-      {
-        type: "logarithmic",
-        position: "bottom",
-        ticks: {
-          userCallback: function (tick) {
-            var remain =
-              tick / Math.pow(10, Math.floor(Chart.helpers.log10(tick)));
-            if (remain === 1 || remain === 2 || remain === 5) {
-              return tick.toString() + "Hz";
-            }
-            return "";
-          },
-        },
-        scaleLabel: {
-          labelString: "Frequency",
-          display: true,
-        },
-      },
-    ],
-    yAxes: [
-      {
-        type: "linear",
-        ticks: {
-          userCallback: function (tick) {
-            return tick.toString() + "dB";
-          },
-        },
-        scaleLabel: {
-          labelString: "Voltage",
-          display: true,
-        },
-      },
-    ],
-  },
-};
-
 const ChartsPage = () => {
+  const classes = useStyles();
+  const [age, setAge] = React.useState("");
+
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
+
+  const [error, seterror] = useState(null);
+  const [success, setsuccess] = useState(null);
+  const [site, setSite] = useState();
+  const [evenement, setEvenement] = useState();
+  const [BonPlan, setBonPlan] = useState();
+  const [client, setClient] = useState();
+
+
+  useEffect(() => {
+    const sendRequest = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/condidat/`);
+
+        const responseData = await response.json();
+        if (!response.ok) {
+          throw new Error(responseData.message);
+        }
+
+        setClient(responseData.condidat);
+      } catch (err) {
+        seterror(err.message);
+      }
+    };
+
+    sendRequest();
+  }, []);
+
+
+  useEffect(() => {
+    const sendRequest = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/entreprise/`);
+
+        const responseData = await response.json();
+        if (!response.ok) {
+          throw new Error(responseData.message);
+        }
+
+        setBonPlan(responseData.entreprises);
+      } catch (err) {
+        seterror(err.message);
+      }
+    };
+
+    sendRequest();
+  }, []);
+
+  useEffect(() => {
+    const sendRequest = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/evenement/`);
+
+        const responseData = await response.json();
+        if (!response.ok) {
+          throw new Error(responseData.message);
+        }
+
+        setEvenement(responseData.evenement);
+      } catch (err) {
+        seterror(err.message);
+      }
+    };
+
+    sendRequest();
+  }, []);
+
+  useEffect(() => {
+    const sendRequest = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/site/`);
+
+        const responseData = await response.json();
+        if (!response.ok) {
+          throw new Error(responseData.message);
+        }
+
+        setSite(responseData.sites);
+      } catch (err) {
+        seterror(err.message);
+      }
+    };
+
+    sendRequest();
+  }, []);
+
+  console.log(site);
+  const dataBar = {
+    labels: [ "Entreprise","Client"],
+    datasets: [
+      {
+        label: "Données ",
+        backgroundColor: "rgba(255,99,132,0.2)",
+        borderColor: "rgba(255,99,132,1)",
+        borderWidth: 0,
+        hoverBackgroundColor: "rgba(255,99,132,0.4)",
+        hoverBorderColor: "rgba(255,99,132,1)",
+        data: [
+          
+          BonPlan && BonPlan.length,
+          client && client.length,
+        ],
+      },
+    ],
+  };
+
+  const [siteId, setSiteId] = useState();
+  const [siteE, setsiteE] = useState();
+
+  const onchange = (e) => {
+    if (e.target.name === "sId") {
+      setSiteId(e.target.value);
+    }
+  };
+
+  useEffect(() => {
+    const sendRequest = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/entreprise/${siteId}`
+        );
+
+        const responseData = await response.json();
+        if (!response.ok) {
+          throw new Error(responseData.message);
+        }
+
+        setsiteE(responseData.entreprise);
+      } catch (err) {
+        seterror(err.message);
+      }
+    };
+
+    sendRequest();
+  }, [siteId]);
+
+  console.log(siteE);
+
+  const dataPolar = {
+    datasets: [
+      {
+        data: [
+          /* siteE && siteE.capacite, */
+          siteE && siteE.offres.length,
+          
+        ],
+        backgroundColor: [
+          "#F7464A",
+          "#46BFBD",
+          "#FDB45C",
+          "#949FB1",
+          "#4D5360",
+        ],
+        label: "My dataset", // for legend
+      },
+    ],
+    labels: ["Offres"],
+  };
+
   return (
     <MDBContainer>
       <SectionContainer header="Bar chart">
         <Bar data={dataBar} options={{ responsive: true }} />
       </SectionContainer>
 
-      <SectionContainer header="Pie chart">
-        <Pie data={dataPie} options={{ responsive: true }} />
+      <FormControl className={classes.formControl}>
+        <InputLabel id="demo-simple-select-label">Entreprise</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={siteId}
+          name="sId"
+          onChange={onchange}
+        >
+          {BonPlan &&
+            BonPlan.map((row) => <MenuItem value={row._id}>{row.nom_entreprise}</MenuItem>)}
+        </Select>
+      </FormControl>
+
+      <SectionContainer header="">
+        <Polar data={dataPolar} options={{ responsive: true }} />
       </SectionContainer>
 
-      <SectionContainer header="Doughnut chart">
-        <Doughnut data={dataDoughnut} options={{ responsive: true }} />
-      </SectionContainer>
+      
     </MDBContainer>
   );
 };
